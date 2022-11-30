@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 # Software License Agreement (BSD License)
 #
 # Copyright (c) 2008, Willow Garage, Inc.
@@ -37,17 +38,65 @@
 ## to the 'chatter' topic
 
 import rospy
+import socket
+#import tqdm
+import os
+import threading
+
 from std_msgs.msg import String
+from std_msgs.msg import Int8
 
 def talker():
+    print('1')
     pub = rospy.Publisher('chatter', String, queue_size=10)
+    pub_udp = rospy.Publisher('comm_udp', Int8, queue_size=10)
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(10) # 10hz
+
+    # 设置服务器的ip和port
+    # 服务器信息
+    sever_host = '192.168.107.155'
+    sever_port = 2000
+    # 传输数据间隔符
+    SEPARATOR = '<SEPARATOR>'
+
+    # 文件缓冲区
+    Buffersize = 1024
+    s = socket.socket()
+    s.bind((sever_host, sever_port))
+    print('2')
+
+    # 设置监听数
+    #s.listen(128)
+    #print(f'服务器监听{sever_host}:{sever_port}')
+    print('3')
+
+    # 接收客户端连接
+    #client_socket, address = s.accept()
+    # 打印客户端ip
+    #print(f'客户端{address}连接')
+
     while not rospy.is_shutdown():
-        hello_str = "[udp] hello world %s" % rospy.get_time()
-        rospy.loginfo(hello_str)
-        pub.publish(hello_str)
+	s.listen(128)
+	client_socket, address = s.accept()
+    	# while 1:
+        bytes_read = client_socket.recv(Buffersize).decode()
+        #        if not bytes_read:
+        #            break
+        if bytes_read:
+	    print(bytes_read)
+ 	    pub.publish(bytes_read)
+	    #pub_udp.publish(bytes_read)
+	    if bytes_read == '5':
+		print('stop!!')
+	
+	
+        #hello_str = "[udp] hello world %s" % rospy.get_time()
+        #rospy.loginfo(hello_str)
+        #pub.publish(hello_str)
         rate.sleep()
+    client_socket.close()
+    s.close()
 
 if __name__ == '__main__':
     try:
