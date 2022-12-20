@@ -47,16 +47,20 @@ from std_msgs.msg import String
 from std_msgs.msg import Int8
 
 def talker():
-    print('1')
-    pub = rospy.Publisher('chatter', String, queue_size=10)
-    pub_udp = rospy.Publisher('comm_udp', Int8, queue_size=10)
+
+    #pub = rospy.Publisher('chatter', String, queue_size=10)
+    pub_udp = rospy.Publisher('comm_udp', String, queue_size=10)
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(10) # 10hz
 
     # 设置服务器的ip和port
     # 服务器信息
-    sever_host = '192.168.107.155'
+    sever_host = '192.168.155.156'
     sever_port = 2000
+    print("sever_host")
+    print(sever_host)
+    print("sever_port")
+    print(sever_port)
     # 传输数据间隔符
     SEPARATOR = '<SEPARATOR>'
 
@@ -64,12 +68,12 @@ def talker():
     Buffersize = 1024
     s = socket.socket()
     s.bind((sever_host, sever_port))
-    print('2')
+
 
     # 设置监听数
     #s.listen(128)
     #print(f'服务器监听{sever_host}:{sever_port}')
-    print('3')
+
 
     # 接收客户端连接
     #client_socket, address = s.accept()
@@ -85,8 +89,8 @@ def talker():
         #            break
         if bytes_read:
 	    print(bytes_read)
- 	    pub.publish(bytes_read)
-	    #pub_udp.publish(bytes_read)
+ 	    #pub.publish(bytes_read)
+	    pub_udp.publish(bytes_read)
 	    if bytes_read == '5':
 		print('stop!!')
 	

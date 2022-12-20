@@ -38,15 +38,27 @@
 
 import rospy
 from std_msgs.msg import String
+from std_msgs.msg import Int8
 
 def talker():
-    pub = rospy.Publisher('chatter', String, queue_size=10)
+    #pub = rospy.Publisher('chatter', String, queue_size=10)
+    pub_udp = rospy.Publisher('comm_udp', Int8, queue_size=10)
     rospy.init_node('talker', anonymous=True)
-    rate = rospy.Rate(10) # 10hz
+    rate = rospy.Rate(1) # 10hz
+    count = 0;
     while not rospy.is_shutdown():
-        hello_str = "hello world %s" % rospy.get_time()
-        rospy.loginfo(hello_str)
-        pub.publish(hello_str)
+        #hello_str = "hello world %s" % rospy.get_time()
+        #rospy.loginfo(hello_str)
+        #pub.publish(hello_str)
+	if count <=5:
+	    byte_udp = 1
+	elif count <=10:
+	    byte_udp = 5
+	else:
+	    count =0
+
+	pub_udp.publish(byte_udp)
+	count=count + 1
         rate.sleep()
 
 if __name__ == '__main__':
