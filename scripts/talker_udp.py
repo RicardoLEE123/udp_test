@@ -55,7 +55,7 @@ def talker():
 
     # 设置服务器的ip和port
     # 服务器信息
-    sever_host = '192.168.155.156'
+    sever_host = '192.168.155.156'#'192.168.50.65' 
     sever_port = 2000
     print("sever_host")
     print(sever_host)

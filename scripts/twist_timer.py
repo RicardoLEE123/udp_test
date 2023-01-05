@@ -18,13 +18,19 @@ State=Enum('State',('MOVE','STOP'))
 
 twist = Twist()
 byte_receive = String()
-g_state=State.STOP                                                                            
+g_state=State.STOP 
+move_counter = 0                                                                           
 
 def subCallback2(byte):
     
-    global byte_receive
+    global byte_receive, move_counter
     byte_receive = byte
     #print(byte_receive)
+    if byte_receive.data == "5":
+	move_counter = 0
+    else:
+	move_counter = move_counter+1
+
 
 def control(pub,linear,angular):
     global twist
@@ -49,7 +55,7 @@ def timeCallback2(event):
  
     pub = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
  
-    global byte_receive, g_state
+    global byte_receive, g_state, move_counter
 
 
     if byte_receive.data == "5":
@@ -59,11 +65,18 @@ def timeCallback2(event):
  	    rospy.loginfo('----------stop')
 	    g_state=State.MOVE
     else:
-        control(pub,0.1,0)
-	if g_state==State.MOVE:
-	    print(byte_receive)
- 	    rospy.loginfo('----------move')
-	    g_state=State.STOP
+	if move_counter > 1:
+	    control(pub,0.15,0)
+	    if g_state==State.STOP:
+	    	print(byte_receive)
+ 	    	rospy.loginfo('----------move')
+	    	g_state=State.MOVE
+	else:
+	    control(pub,0,0)
+	    if g_state==State.MOVE:
+	        print(byte_receive)
+ 	        rospy.loginfo('----------stop 2')
+	        g_state=State.STOP
 
 
 if __name__ == "__main__":
