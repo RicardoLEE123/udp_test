@@ -79,10 +79,11 @@ def talker():
     #client_socket, address = s.accept()
     # 打印客户端ip
     #print(f'客户端{address}连接')
-
+    #s.listen(128)
+    #client_socket, address = s.accept()
     while not rospy.is_shutdown():
-	s.listen(128)
-	client_socket, address = s.accept()
+        s.listen(128)
+        client_socket, address = s.accept()
     	# while 1:
         bytes_read = client_socket.recv(Buffersize).decode()
         #        if not bytes_read:

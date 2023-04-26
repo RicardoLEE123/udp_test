@@ -9,7 +9,7 @@ import threading
 def received( ):
     # 设置服务器的ip和 port
     # 服务器信息
-    sever_host = '192.168.107.50'
+    sever_host = '192.168.50.19'
     #sever_host = '10.42.0.231'
     sever_port = 2000
     # 传输数据间隔符
@@ -46,7 +46,7 @@ def received( ):
         #progress = tqdm.tqdm(range(file_size), f'接收{filename}', unit='B', unit_divisor=1024, unit_scale=True)
 
         while 1:
-                bytes_read = client_socket.recv(Buffersize).decode()
+                bytes_read = client_socket.recv(Buffersize)
                 if not bytes_read:
                     break
                 print(bytes_read)
@@ -54,5 +54,5 @@ def received( ):
     s.close()
 
 if __name__ == "__main__":
-    #while 1:
+    while 1:
         received()

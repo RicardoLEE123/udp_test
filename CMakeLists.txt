@@ -163,7 +163,7 @@ include_directories(
 #   scripts/my_python_script
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
-catkin_install_python(PROGRAMS scripts/talker.py scripts/listener.py scripts/talker_udp.py scripts/twist_timer.py
+catkin_install_python(PROGRAMS scripts/move_TCP_receive.py scripts/move_TCP_send.py scripts/talker_udp.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
